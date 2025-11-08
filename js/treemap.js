@@ -3,6 +3,14 @@
  * Demonstrates: d3.treemap(), hierarchical layouts
  */
 
+// Chart metadata
+window.TREEMAP_CONFIG = {
+    title: 'Treemap',
+    subtitle: 'Hierarchical view by date and size category',
+    description: 'Space-filling visualization of hierarchical data. Rectangle size represents asteroid diameter. Uses d3.treemap() layout to efficiently pack nested rectangles.',
+    category: 'hierarchy'
+};
+
 function renderTreemap(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

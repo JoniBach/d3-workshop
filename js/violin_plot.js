@@ -3,6 +3,14 @@
  * Demonstrates: Density estimation, mirrored area chart
  */
 
+// Chart metadata
+window.VIOLIN_PLOT_CONFIG = {
+    title: 'Violin Plot',
+    subtitle: 'Velocity distribution density visualization',
+    description: 'Combines box plot with density estimation. Width at each point shows the probability density. Mirrored shape reveals distribution shape better than histograms.',
+    category: 'distribution'
+};
+
 function renderViolinPlot(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

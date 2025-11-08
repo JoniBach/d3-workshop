@@ -3,6 +3,14 @@
  * Demonstrates: Statistical visualization, quartiles, outliers
  */
 
+// Chart metadata
+window.BOX_PLOT_CONFIG = {
+    title: 'Box Plot',
+    subtitle: 'Asteroid size distribution with quartiles',
+    description: 'Statistical visualization showing median, quartiles, and outliers. The box represents the interquartile range (IQR), whiskers show min/max, and dots are outliers.',
+    category: 'distribution'
+};
+
 function renderBoxPlot(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

@@ -17,155 +17,7 @@
     </header>
 
     <main id="dashboard">
-        <!-- Categorical/Comparison Charts -->
-        <section class="chart-section">
-            <h2>📊 Categorical & Comparison Charts</h2>
-            
-            <div class="chart-card">
-                <h3>Bar Chart</h3>
-                <p class="chart-description">Top 10 asteroids by estimated diameter</p>
-                <div id="bar-chart" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Horizontal Bar Chart</h3>
-                <p class="chart-description">Asteroids sorted by relative velocity</p>
-                <div id="horizontal-bar" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Grouped Bar Chart</h3>
-                <p class="chart-description">Hazardous vs non-hazardous by size category</p>
-                <div id="grouped-bar" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Stacked Bar Chart</h3>
-                <p class="chart-description">Daily count of hazardous and non-hazardous asteroids</p>
-                <div id="stacked-bar" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Pie Chart</h3>
-                <p class="chart-description">Percentage of hazardous vs non-hazardous asteroids</p>
-                <div id="pie-chart" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Donut Chart</h3>
-                <p class="chart-description">Hazardous asteroid distribution with center label</p>
-                <div id="donut-chart" class="chart-container"></div>
-            </div>
-        </section>
-
-        <!-- Distribution Charts -->
-        <section class="chart-section">
-            <h2>📈 Distribution Charts</h2>
-            
-            <div class="chart-card">
-                <h3>Histogram</h3>
-                <p class="chart-description">Distribution of asteroid velocities</p>
-                <div id="histogram" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Box Plot</h3>
-                <p class="chart-description">Asteroid size distribution with quartiles</p>
-                <div id="box-plot" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Violin Plot</h3>
-                <p class="chart-description">Velocity distribution density visualization</p>
-                <div id="violin-plot" class="chart-container"></div>
-            </div>
-        </section>
-
-        <!-- Relationship/Correlation Charts -->
-        <section class="chart-section">
-            <h2>🔗 Relationship & Correlation Charts</h2>
-            
-            <div class="chart-card">
-                <h3>Scatter Plot</h3>
-                <p class="chart-description">Asteroid size vs velocity relationship</p>
-                <div id="scatter-plot" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Bubble Chart</h3>
-                <p class="chart-description">Size, velocity, and miss distance (3 variables)</p>
-                <div id="bubble-chart" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Heatmap</h3>
-                <p class="chart-description">Asteroid density by size and velocity ranges</p>
-                <div id="heatmap" class="chart-container"></div>
-            </div>
-        </section>
-
-        <!-- Time-Based Charts -->
-        <section class="chart-section">
-            <h2>⏰ Time-Based Charts</h2>
-            
-            <div class="chart-card">
-                <h3>Line Chart</h3>
-                <p class="chart-description">Daily asteroid count over time</p>
-                <div id="line-chart" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Area Chart</h3>
-                <p class="chart-description">Cumulative asteroids over the date range</p>
-                <div id="area-chart" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Stream Graph</h3>
-                <p class="chart-description">Hazardous and non-hazardous flow over time</p>
-                <div id="stream-graph" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Timeline</h3>
-                <p class="chart-description">Individual asteroid closest approach dates</p>
-                <div id="timeline" class="chart-container"></div>
-            </div>
-        </section>
-
-        <!-- Part-to-Whole Charts -->
-        <section class="chart-section">
-            <h2>🧩 Part-to-Whole Charts</h2>
-            
-            <div class="chart-card">
-                <h3>Treemap</h3>
-                <p class="chart-description">Hierarchical view by date and size category</p>
-                <div id="treemap" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Sunburst Chart</h3>
-                <p class="chart-description">Radial hierarchical visualization</p>
-                <div id="sunburst" class="chart-container"></div>
-            </div>
-        </section>
-
-        <!-- Network/Relationship Charts -->
-        <section class="chart-section">
-            <h2>🕸️ Network & Flow Charts</h2>
-            
-            <div class="chart-card">
-                <h3>Force-Directed Graph</h3>
-                <p class="chart-description">Cluster asteroids by similar properties</p>
-                <div id="force-directed" class="chart-container"></div>
-            </div>
-
-            <div class="chart-card">
-                <h3>Sankey Diagram</h3>
-                <p class="chart-description">Flow from dates to size categories to hazard status</p>
-                <div id="sankey" class="chart-container"></div>
-            </div>
-        </section>
+        <!-- Dashboard will be dynamically generated by chart_registry.js -->
     </main>
 
     <footer>
@@ -178,6 +30,9 @@
     
     <!-- Data Fetcher -->
     <script src="js/data_fetcher.js"></script>
+    
+    <!-- Chart Registry (must load before visualizations) -->
+    <script src="js/chart_registry.js"></script>
 
     <!-- Visualization Scripts -->
     <script src="js/bar_chart.js"></script>
@@ -206,8 +61,12 @@
         // Initialize the dashboard when page loads
         async function initDashboard() {
             try {
-                // Fetch and process data
+                // Fetch and process data first
                 const data = await initializeData();
+                
+                // Build dashboard structure dynamically from chart registry
+                // (do this after data loads to ensure all scripts are loaded)
+                buildDashboard();
                 
                 // Hide loading indicator
                 document.getElementById('loading').style.display = 'none';
@@ -222,38 +81,8 @@
                     </div>
                 `;
                 
-                // Render all visualizations
-                // Categorical/Comparison
-                if (typeof renderBarChart === 'function') renderBarChart('bar-chart', data);
-                if (typeof renderHorizontalBar === 'function') renderHorizontalBar('horizontal-bar', data);
-                if (typeof renderGroupedBar === 'function') renderGroupedBar('grouped-bar', data);
-                if (typeof renderStackedBar === 'function') renderStackedBar('stacked-bar', data);
-                if (typeof renderPieChart === 'function') renderPieChart('pie-chart', data);
-                if (typeof renderDonutChart === 'function') renderDonutChart('donut-chart', data);
-                
-                // Distribution
-                if (typeof renderHistogram === 'function') renderHistogram('histogram', data);
-                if (typeof renderBoxPlot === 'function') renderBoxPlot('box-plot', data);
-                if (typeof renderViolinPlot === 'function') renderViolinPlot('violin-plot', data);
-                
-                // Relationship
-                if (typeof renderScatterPlot === 'function') renderScatterPlot('scatter-plot', data);
-                if (typeof renderBubbleChart === 'function') renderBubbleChart('bubble-chart', data);
-                if (typeof renderHeatmap === 'function') renderHeatmap('heatmap', data);
-                
-                // Time-based
-                if (typeof renderLineChart === 'function') renderLineChart('line-chart', data);
-                if (typeof renderAreaChart === 'function') renderAreaChart('area-chart', data);
-                if (typeof renderStreamGraph === 'function') renderStreamGraph('stream-graph', data);
-                if (typeof renderTimeline === 'function') renderTimeline('timeline', data);
-                
-                // Part-to-whole
-                if (typeof renderTreemap === 'function') renderTreemap('treemap', data);
-                if (typeof renderSunburst === 'function') renderSunburst('sunburst', data);
-                
-                // Network
-                if (typeof renderForceDirected === 'function') renderForceDirected('force-directed', data);
-                if (typeof renderSankey === 'function') renderSankey('sankey', data);
+                // Render all visualizations using registry
+                renderAllCharts(data);
                 
                 console.log('✅ All visualizations rendered!');
             } catch (error) {

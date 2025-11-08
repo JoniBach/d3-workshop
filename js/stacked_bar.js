@@ -3,6 +3,14 @@
  * Demonstrates: Stacked bars, d3.stack()
  */
 
+// Chart metadata
+window.STACKED_BAR_CONFIG = {
+    title: 'Stacked Bar Chart',
+    subtitle: 'Daily count of hazardous and non-hazardous asteroids',
+    description: 'Shows part-to-whole relationships by stacking values. Uses d3.stack() to compute cumulative positions. Each bar shows total with color-coded segments.',
+    category: 'categorical'
+};
+
 function renderStackedBar(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

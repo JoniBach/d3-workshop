@@ -3,6 +3,14 @@
  * Demonstrates: Three variables (x, y, radius)
  */
 
+// Chart metadata
+window.BUBBLE_CHART_CONFIG = {
+    title: 'Bubble Chart',
+    subtitle: 'Size, velocity, and miss distance (3 variables)',
+    description: 'Extension of scatter plot with a third dimension. Circle size represents miss distance. Uses d3.scaleSqrt() for proportional area scaling.',
+    category: 'relationship'
+};
+
 function renderBubbleChart(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

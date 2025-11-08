@@ -3,6 +3,14 @@
  * Demonstrates: 2D binning, color scales
  */
 
+// Chart metadata
+window.HEATMAP_CONFIG = {
+    title: 'Heatmap',
+    subtitle: 'Asteroid density by size and velocity ranges',
+    description: 'Uses color intensity to show density in a 2D grid. Darker colors indicate more asteroids in that size/velocity combination. Good for spotting concentration patterns.',
+    category: 'relationship'
+};
+
 function renderHeatmap(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

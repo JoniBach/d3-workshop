@@ -3,6 +3,14 @@
  * Demonstrates: Circle positioning, two continuous variables
  */
 
+// Chart metadata
+window.SCATTER_PLOT_CONFIG = {
+    title: 'Scatter Plot',
+    subtitle: 'Asteroid size vs velocity relationship',
+    description: 'Shows correlation between two continuous variables. Each point represents one asteroid. Reveals patterns, clusters, and outliers in the relationship.',
+    category: 'relationship'
+};
+
 function renderScatterPlot(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

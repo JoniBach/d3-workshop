@@ -3,6 +3,14 @@
  * Demonstrates: Timeline visualization with dots
  */
 
+// Chart metadata
+window.TIMELINE_CONFIG = {
+    title: 'Timeline',
+    subtitle: 'Individual asteroid closest approach dates',
+    description: 'Linear representation of events over time. Each asteroid appears as a point on the timeline. Useful for showing when specific events occur.',
+    category: 'time'
+};
+
 function renderTimeline(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

@@ -3,6 +3,14 @@
  * Demonstrates: d3.pie(), d3.arc(), arc generators
  */
 
+// Chart metadata
+window.PIE_CHART_CONFIG = {
+    title: 'Pie Chart',
+    subtitle: 'Percentage of hazardous vs non-hazardous asteroids',
+    description: 'Classic circular chart showing proportions. Uses d3.pie() to compute angles and d3.arc() to draw slices. Good for showing simple part-to-whole relationships.',
+    category: 'categorical'
+};
+
 function renderPieChart(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

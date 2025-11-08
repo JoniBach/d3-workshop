@@ -3,6 +3,14 @@
  * Demonstrates: d3.stack(), streamgraph offset
  */
 
+// Chart metadata
+window.STREAM_GRAPH_CONFIG = {
+    title: 'Stream Graph',
+    subtitle: 'Hazardous and non-hazardous flow over time',
+    description: 'Stacked area chart with organic flowing appearance. Uses d3.stackOffsetWiggle for centered baseline. Shows how categories change in proportion over time.',
+    category: 'time'
+};
+
 function renderStreamGraph(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

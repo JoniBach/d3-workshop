@@ -3,6 +3,14 @@
  * Demonstrates: d3.area(), cumulative data
  */
 
+// Chart metadata
+window.AREA_CHART_CONFIG = {
+    title: 'Area Chart',
+    subtitle: 'Cumulative asteroids over the date range',
+    description: 'Filled version of line chart emphasizing volume. Uses d3.area() to create filled regions. Great for showing cumulative totals or magnitude over time.',
+    category: 'time'
+};
+
 function renderAreaChart(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

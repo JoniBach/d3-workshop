@@ -3,6 +3,14 @@
  * Demonstrates: Basic D3 scales, axes, and rectangles
  */
 
+// Chart metadata
+window.BAR_CHART_CONFIG = {
+    title: 'Bar Chart',
+    subtitle: 'Top 10 asteroids by estimated diameter',
+    description: 'A fundamental chart type using rectangles to compare values. Height represents the asteroid diameter. Demonstrates D3 scales, axes, and basic SVG rectangles.',
+    category: 'categorical'
+};
+
 function renderBarChart(containerId, data) {
     // Clear any existing content
     const container = d3.select(`#${containerId}`);

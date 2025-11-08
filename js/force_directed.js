@@ -3,6 +3,14 @@
  * Demonstrates: d3.forceSimulation(), force layouts
  */
 
+// Chart metadata
+window.FORCE_DIRECTED_CONFIG = {
+    title: 'Force-Directed Graph',
+    subtitle: 'Cluster asteroids by similar properties',
+    description: 'Physics-based network layout using d3.forceSimulation(). Nodes repel each other while links pull connected nodes together. Reveals natural clustering patterns.',
+    category: 'network'
+};
+
 function renderForceDirected(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

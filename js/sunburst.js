@@ -3,6 +3,14 @@
  * Demonstrates: d3.partition(), arc for hierarchy
  */
 
+// Chart metadata
+window.SUNBURST_CONFIG = {
+    title: 'Sunburst Chart',
+    subtitle: 'Radial hierarchical visualization',
+    description: 'Circular version of treemap showing hierarchy as nested rings. Uses d3.partition() and arc generators. Inner rings are parents, outer rings are children.',
+    category: 'hierarchy'
+};
+
 function renderSunburst(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

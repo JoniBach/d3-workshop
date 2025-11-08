@@ -3,6 +3,14 @@
  * Demonstrates: d3.line(), time series
  */
 
+// Chart metadata
+window.LINE_CHART_CONFIG = {
+    title: 'Line Chart',
+    subtitle: 'Daily asteroid count over time',
+    description: 'Shows trends over time by connecting data points. Uses d3.line() path generator and d3.scaleTime() for date handling. Essential for time series data.',
+    category: 'time'
+};
+
 function renderLineChart(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

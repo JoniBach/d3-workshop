@@ -3,6 +3,14 @@
  * Demonstrates: Horizontal orientation, different axis arrangement
  */
 
+// Chart metadata
+window.HORIZONTAL_BAR_CONFIG = {
+    title: 'Horizontal Bar Chart',
+    subtitle: 'Asteroids sorted by relative velocity',
+    description: 'Same as bar chart but rotated 90 degrees. Better for displaying long labels and comparing many items. Shows how to swap X and Y scales.',
+    category: 'categorical'
+};
+
 function renderHorizontalBar(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

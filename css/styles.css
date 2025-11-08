@@ -92,10 +92,19 @@ main {
     margin-bottom: 0.5rem;
 }
 
-.chart-description {
+.chart-subtitle {
     color: #7f8c8d;
     font-size: 0.9rem;
     margin-bottom: 1rem;
+}
+
+.chart-description {
+    color: #555;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    font-style: italic;
 }
 
 .chart-container {

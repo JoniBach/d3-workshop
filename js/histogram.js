@@ -3,6 +3,14 @@
  * Demonstrates: d3.bin(), binning continuous data
  */
 
+// Chart metadata
+window.HISTOGRAM_CONFIG = {
+    title: 'Histogram',
+    subtitle: 'Distribution of asteroid velocities',
+    description: 'Shows frequency distribution by grouping continuous data into bins. Uses d3.bin() to automatically create intervals. Reveals patterns like normal distribution or skewness.',
+    category: 'distribution'
+};
+
 function renderHistogram(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

@@ -3,6 +3,14 @@
  * Demonstrates: Arc with innerRadius, center labels
  */
 
+// Chart metadata
+window.DONUT_CHART_CONFIG = {
+    title: 'Donut Chart',
+    subtitle: 'Hazardous asteroid distribution with center label',
+    description: 'Variation of pie chart with hollow center. The innerRadius creates the "donut hole" which can display summary statistics or labels.',
+    category: 'categorical'
+};
+
 function renderDonutChart(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

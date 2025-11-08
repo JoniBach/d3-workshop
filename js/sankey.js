@@ -3,6 +3,14 @@
  * Demonstrates: d3.sankey(), flow visualization
  */
 
+// Chart metadata
+window.SANKEY_CONFIG = {
+    title: 'Sankey Diagram',
+    subtitle: 'Flow from dates to size categories to hazard status',
+    description: 'Shows flow between categories with width representing quantity. Curved paths connect source nodes to target nodes. Excellent for visualizing multi-stage processes.',
+    category: 'network'
+};
+
 function renderSankey(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();

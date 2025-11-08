@@ -3,6 +3,14 @@
  * Demonstrates: Grouped bars, nested scales
  */
 
+// Chart metadata
+window.GROUPED_BAR_CONFIG = {
+    title: 'Grouped Bar Chart',
+    subtitle: 'Hazardous vs non-hazardous by size category',
+    description: 'Compares multiple values within categories using nested scales. Each size category shows hazardous and non-hazardous counts side-by-side.',
+    category: 'categorical'
+};
+
 function renderGroupedBar(containerId, data) {
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();
