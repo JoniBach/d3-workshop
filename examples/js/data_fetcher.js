@@ -8,7 +8,24 @@ let asteroidData = null;
 
 /**
  * Fetch asteroid data from NASA NEO API
- * @returns {Promise<Object>} Processed asteroid data
+ * @returns {Promise<{
+ *   asteroids: Array<{
+ *     id: string,
+ *     name: string,
+ *     date: string,
+ *     diameter_min: number,
+ *     diameter_max: number,
+ *     diameter_avg: number,
+ *     is_hazardous: boolean,
+ *     velocity: number,
+ *     miss_distance: number,
+ *     absolute_magnitude: number
+ *   }>,
+ *   dates: string[],
+ *   total_count: number,
+ *   hazardous_count: number,
+ *   non_hazardous_count: number
+ * }>} Processed asteroid data with metadata
  */
 async function fetchAsteroidData() {
     try {
@@ -28,8 +45,25 @@ async function fetchAsteroidData() {
 
 /**
  * Process raw NASA NEO data into a flat array of asteroids
- * @param {Object} rawData - Raw API response
- * @returns {Object} Processed data with asteroids array and metadata
+ * @param {Object} rawData - Raw API response from NASA NEO API
+ * @returns {{
+ *   asteroids: Array<{
+ *     id: string,
+ *     name: string,
+ *     date: string,
+ *     diameter_min: number,
+ *     diameter_max: number,
+ *     diameter_avg: number,
+ *     is_hazardous: boolean,
+ *     velocity: number,
+ *     miss_distance: number,
+ *     absolute_magnitude: number
+ *   }>,
+ *   dates: string[],
+ *   total_count: number,
+ *   hazardous_count: number,
+ *   non_hazardous_count: number
+ * }} Processed data with asteroids array and metadata
  */
 function processNEOData(rawData) {
     const asteroids = [];
@@ -65,7 +99,23 @@ function processNEOData(rawData) {
 
 /**
  * Get asteroids grouped by date
- * @returns {Object} Object with dates as keys and asteroid arrays as values
+ * @returns {Object<string, Array<{
+ *   id: string,
+ *   name: string,
+ *   date: string,
+ *   diameter_min: number,
+ *   diameter_max: number,
+ *   diameter_avg: number,
+ *   is_hazardous: boolean,
+ *   velocity: number,
+ *   miss_distance: number,
+ *   absolute_magnitude: number
+ * }>>|null} Object with dates (YYYY-MM-DD) as keys and asteroid arrays as values, or null if data not loaded
+ * @example
+ * {
+ *   "2024-01-01": [asteroid1, asteroid2, ...],
+ *   "2024-01-02": [asteroid3, asteroid4, ...]
+ * }
  */
 function getAsteroidsByDate() {
     if (!asteroidData) return null;
@@ -83,7 +133,16 @@ function getAsteroidsByDate() {
 
 /**
  * Get asteroids categorized by size
- * @returns {Object} Object with size categories and their asteroids
+ * @returns {{
+ *   small: Array<Object>,
+ *   medium: Array<Object>,
+ *   large: Array<Object>,
+ *   very_large: Array<Object>
+ * }|null} Object with size categories and their asteroids, or null if data not loaded
+ * - small: < 0.1 km
+ * - medium: 0.1 - 0.5 km
+ * - large: 0.5 - 1 km
+ * - very_large: > 1 km
  */
 function getAsteroidsBySizeCategory() {
     if (!asteroidData) return null;
@@ -108,9 +167,20 @@ function getAsteroidsBySizeCategory() {
 
 /**
  * Get top N asteroids by a specific metric
- * @param {string} metric - The metric to sort by (e.g., 'diameter_avg', 'velocity')
- * @param {number} n - Number of top asteroids to return
- * @returns {Array} Array of top N asteroids
+ * @param {string} metric - The metric to sort by (e.g., 'diameter_avg', 'velocity', 'miss_distance', 'absolute_magnitude')
+ * @param {number} [n=10] - Number of top asteroids to return (default: 10)
+ * @returns {Array<{
+ *   id: string,
+ *   name: string,
+ *   date: string,
+ *   diameter_min: number,
+ *   diameter_max: number,
+ *   diameter_avg: number,
+ *   is_hazardous: boolean,
+ *   velocity: number,
+ *   miss_distance: number,
+ *   absolute_magnitude: number
+ * }>|null} Array of top N asteroids sorted by the specified metric (descending), or null if data not loaded
  */
 function getTopAsteroids(metric, n = 10) {
     if (!asteroidData) return null;
@@ -122,8 +192,21 @@ function getTopAsteroids(metric, n = 10) {
 
 /**
  * Get statistics for a specific metric
- * @param {string} metric - The metric to analyze
- * @returns {Object} Statistics object with min, max, mean, median, etc.
+ * @param {string} metric - The metric to analyze (e.g., 'diameter_avg', 'velocity', 'miss_distance', 'absolute_magnitude')
+ * @returns {{
+ *   min: number,
+ *   max: number,
+ *   mean: number,
+ *   median: number,
+ *   q1: number,
+ *   q3: number
+ * }|null} Statistics object with descriptive statistics, or null if data not loaded
+ * - min: Minimum value
+ * - max: Maximum value
+ * - mean: Average value
+ * - median: Middle value (50th percentile)
+ * - q1: First quartile (25th percentile)
+ * - q3: Third quartile (75th percentile)
  */
 function getMetricStats(metric) {
     if (!asteroidData) return null;
@@ -143,7 +226,17 @@ function getMetricStats(metric) {
 
 /**
  * Get daily counts of hazardous and non-hazardous asteroids
- * @returns {Array} Array of objects with date and counts
+ * @returns {Array<{
+ *   date: string,
+ *   hazardous: number,
+ *   non_hazardous: number,
+ *   total: number
+ * }>|null} Array of objects with date and counts for each day, or null if data not loaded
+ * @example
+ * [
+ *   { date: "2024-01-01", hazardous: 5, non_hazardous: 15, total: 20 },
+ *   { date: "2024-01-02", hazardous: 3, non_hazardous: 12, total: 15 }
+ * ]
  */
 function getDailyCounts() {
     if (!asteroidData) return null;
@@ -160,6 +253,14 @@ function getDailyCounts() {
 /**
  * Initialize data fetching and return a promise
  * Call this when the page loads
+ * @returns {Promise<{
+ *   asteroids: Array<Object>,
+ *   dates: string[],
+ *   total_count: number,
+ *   hazardous_count: number,
+ *   non_hazardous_count: number
+ * }>} Promise that resolves to the processed asteroid data
+ * @throws {Error} If the API request fails or data cannot be processed
  */
 async function initializeData() {
     try {
