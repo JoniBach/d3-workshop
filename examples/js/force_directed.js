@@ -19,7 +19,8 @@ function renderForceDirected(containerId, data) {
     const height = 600;
     
     // Use subset of asteroids for performance
-    const asteroids = data.asteroids.slice(0, 50);
+    const byDate = chartData(data).forceDirected;
+    const asteroids = Object.values(byDate).flat().slice(0, 50);
     
     const svg = container
         .append('svg')

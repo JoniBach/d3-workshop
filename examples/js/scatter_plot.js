@@ -19,6 +19,8 @@ function renderScatterPlot(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
+    const asteroids = chartData(data).scatter;
+    
     const svg = container
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -27,12 +29,12 @@ function renderScatterPlot(containerId, data) {
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
     const x = d3.scaleLinear()
-        .domain([0, d3.max(data.asteroids, d => d.diameter_avg)])
+        .domain([0, d3.max(asteroids, d => d.diameter_avg)])
         .nice()
         .range([0, width]);
     
     const y = d3.scaleLinear()
-        .domain([0, d3.max(data.asteroids, d => d.velocity)])
+        .domain([0, d3.max(asteroids, d => d.velocity)])
         .nice()
         .range([height, 0]);
     
@@ -59,7 +61,7 @@ function renderScatterPlot(containerId, data) {
         .text('Velocity (km/h)');
     
     svg.selectAll('.dot')
-        .data(data.asteroids)
+        .data(asteroids)
         .enter()
         .append('circle')
         .attr('class', 'dot')

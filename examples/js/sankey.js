@@ -26,18 +26,26 @@ function renderSankey(containerId, data) {
         .attr('width', width)
         .attr('height', height);
     
-    const sizeCategories = getAsteroidsBySizeCategory();
-    const categories = ['small', 'medium', 'large', 'very_large'];
+    const dailyCounts = chartData(data).sankey;
     
-    // Calculate flows: size category -> hazard status
+    // Group by size category from daily counts
+    const sizeCategories = {
+        small: [],
+        medium: [],
+        large: [],
+        very_large: []
+    };
+    
+    // We'll use a simplified approach - just use the daily counts
+    // Create flows from dates to hazard status
     const flows = [];
-    categories.forEach((cat, i) => {
-        const hazCount = sizeCategories[cat].filter(a => a.is_hazardous).length;
-        const safeCount = sizeCategories[cat].filter(a => !a.is_hazardous).length;
+    dailyCounts.slice(0, 4).forEach((day, i) => {
+        const hazCount = day.hazardous;
+        const safeCount = day.non_hazardous;
         
         if (hazCount > 0) {
             flows.push({
-                source: cat,
+                source: day.date,
                 target: 'hazardous',
                 value: hazCount,
                 sourceY: i * 100 + 50,
@@ -47,7 +55,7 @@ function renderSankey(containerId, data) {
         
         if (safeCount > 0) {
             flows.push({
-                source: cat,
+                source: day.date,
                 target: 'safe',
                 value: safeCount,
                 sourceY: i * 100 + 50,
@@ -87,7 +95,7 @@ function renderSankey(containerId, data) {
     });
     
     // Draw source nodes
-    categories.forEach((cat, i) => {
+    dailyCounts.slice(0, 4).forEach((day, i) => {
         svg.append('rect')
             .attr('x', 150)
             .attr('y', i * 100 + 30)
@@ -100,9 +108,9 @@ function renderSankey(containerId, data) {
             .attr('x', 175)
             .attr('y', i * 100 + 55)
             .attr('text-anchor', 'middle')
-            .style('font-size', '10px')
+            .style('font-size', '8px')
             .style('fill', 'white')
-            .text(cat);
+            .text(day.date.substring(5));
     });
     
     // Draw target nodes

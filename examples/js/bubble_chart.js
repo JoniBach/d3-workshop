@@ -19,6 +19,8 @@ function renderBubbleChart(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
+    const asteroids = chartData(data).bubble;
+    
     const svg = container
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -27,17 +29,17 @@ function renderBubbleChart(containerId, data) {
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
     const x = d3.scaleLinear()
-        .domain([0, d3.max(data.asteroids, d => d.diameter_avg)])
+        .domain([0, d3.max(asteroids, d => d.diameter_avg)])
         .nice()
         .range([0, width]);
     
     const y = d3.scaleLinear()
-        .domain([0, d3.max(data.asteroids, d => d.velocity)])
+        .domain([0, d3.max(asteroids, d => d.velocity)])
         .nice()
         .range([height, 0]);
     
     const radius = d3.scaleSqrt()
-        .domain([0, d3.max(data.asteroids, d => d.miss_distance)])
+        .domain([0, d3.max(asteroids, d => d.miss_distance)])
         .range([2, 20]);
     
     svg.append('g')
@@ -63,7 +65,7 @@ function renderBubbleChart(containerId, data) {
         .text('Velocity (km/h)');
     
     svg.selectAll('.bubble')
-        .data(data.asteroids)
+        .data(asteroids)
         .enter()
         .append('circle')
         .attr('class', 'bubble')

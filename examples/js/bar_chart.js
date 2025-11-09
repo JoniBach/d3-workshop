@@ -22,7 +22,7 @@ function renderBarChart(containerId, data) {
     const height = 500 - margin.top - margin.bottom;
     
     // Get top 10 asteroids by average diameter
-    const topAsteroids = getTopAsteroids('diameter_avg', 10);
+    const topAsteroids = chartData(data).bar;
     
     // Create SVG
     const svg = container

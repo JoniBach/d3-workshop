@@ -19,9 +19,14 @@ function renderDonutChart(containerId, data) {
     const height = 400;
     const radius = Math.min(width, height) / 2 - 40;
     
+    const sizeCategories = chartData(data).donut;
+    const totalCount = Object.values(sizeCategories).flat().length;
+    const hazardousCount = Object.values(sizeCategories).flat().filter(a => a.is_hazardous).length;
+    const nonHazardousCount = totalCount - hazardousCount;
+    
     const pieData = [
-        { label: 'Hazardous', count: data.hazardous_count },
-        { label: 'Non-Hazardous', count: data.non_hazardous_count }
+        { label: 'Hazardous', count: hazardousCount },
+        { label: 'Non-Hazardous', count: nonHazardousCount }
     ];
     
     const svg = container
@@ -61,7 +66,7 @@ function renderDonutChart(containerId, data) {
         .attr('dy', '-0.5em')
         .style('font-size', '32px')
         .style('font-weight', 'bold')
-        .text(data.total_count);
+        .text(totalCount);
     
     svg.append('text')
         .attr('text-anchor', 'middle')

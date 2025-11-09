@@ -19,7 +19,7 @@ function renderHorizontalBar(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    const topAsteroids = getTopAsteroids('velocity', 10);
+    const topAsteroids = chartData(data).horizontalBar;
     
     const svg = container
         .append('svg')

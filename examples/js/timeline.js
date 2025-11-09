@@ -19,7 +19,10 @@ function renderTimeline(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
     
-    const topAsteroids = getTopAsteroids('diameter_avg', 15);
+    const allAsteroids = chartData(data).timeline;
+    const topAsteroids = allAsteroids
+        .sort((a, b) => b.diameter_avg - a.diameter_avg)
+        .slice(0, 15);
     
     const svg = container
         .append('svg')

@@ -19,7 +19,8 @@ function renderHistogram(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    const velocities = data.asteroids.map(d => d.velocity);
+    const asteroids = chartData(data).histogram;
+    const velocities = asteroids.map(d => d.velocity);
     
     const svg = container
         .append('svg')

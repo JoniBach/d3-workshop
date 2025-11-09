@@ -18,14 +18,14 @@ function renderTreemap(containerId, data) {
     const width = 800;
     const height = 500;
     
-    const byDate = getAsteroidsByDate();
+    const sizeCategories = chartData(data).treemap;
     
     // Create hierarchical data
     const hierarchyData = {
         name: 'asteroids',
-        children: data.dates.map(date => ({
-            name: date,
-            children: byDate[date].map(a => ({
+        children: Object.entries(sizeCategories).map(([category, asteroids]) => ({
+            name: category,
+            children: asteroids.map(a => ({
                 name: a.name,
                 value: a.diameter_avg,
                 hazardous: a.is_hazardous

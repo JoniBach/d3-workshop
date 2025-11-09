@@ -19,9 +19,14 @@ function renderPieChart(containerId, data) {
     const height = 400;
     const radius = Math.min(width, height) / 2 - 40;
     
+    const sizeCategories = chartData(data).pie;
+    const totalCount = Object.values(sizeCategories).flat().length;
+    const hazardousCount = Object.values(sizeCategories).flat().filter(a => a.is_hazardous).length;
+    const nonHazardousCount = totalCount - hazardousCount;
+    
     const pieData = [
-        { label: 'Hazardous', count: data.hazardous_count },
-        { label: 'Non-Hazardous', count: data.non_hazardous_count }
+        { label: 'Hazardous', count: hazardousCount },
+        { label: 'Non-Hazardous', count: nonHazardousCount }
     ];
     
     const svg = container
@@ -73,7 +78,7 @@ function renderPieChart(containerId, data) {
         .style('font-weight', 'bold')
         .style('fill', 'white')
         .text(d => {
-            const percent = ((d.data.count / data.total_count) * 100).toFixed(1);
+            const percent = ((d.data.count / totalCount) * 100).toFixed(1);
             return `${percent}%`;
         });
     
