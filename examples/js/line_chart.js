@@ -20,7 +20,7 @@ function renderLineChart(containerId, data) {
     const height = 500 - margin.top - margin.bottom;
     
     // Get daily counts for line chart
-    const chartDataset = getChartData(data).line;
+    const chartData = getChartData(data).line;
     
     const svg = container
         .append('svg')
@@ -30,14 +30,14 @@ function renderLineChart(containerId, data) {
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
     const parseDate = d3.timeParse('%Y-%m-%d');
-    chartDataset.forEach(d => d.parsedDate = parseDate(d.date));
+    chartData.forEach(d => d.parsedDate = parseDate(d.date));
     
     const x = d3.scaleTime()
-        .domain(d3.extent(chartDataset, d => d.parsedDate))
+        .domain(d3.extent(chartData, d => d.parsedDate))
         .range([0, width]);
     
     const y = d3.scaleLinear()
-        .domain([0, d3.max(chartDataset, d => d.total)])
+        .domain([0, d3.max(chartData, d => d.total)])
         .nice()
         .range([height, 0]);
     
@@ -68,14 +68,14 @@ function renderLineChart(containerId, data) {
         .y(d => y(d.total));
     
     svg.append('path')
-        .datum(chartDataset)
+        .datum(chartData)
         .attr('fill', 'none')
         .attr('stroke', '#3498db')
         .attr('stroke-width', 2)
         .attr('d', line);
     
     svg.selectAll('.dot')
-        .data(chartDataset)
+        .data(chartData)
         .enter()
         .append('circle')
         .attr('cx', d => x(d.parsedDate))

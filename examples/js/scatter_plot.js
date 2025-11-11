@@ -20,7 +20,7 @@ function renderScatterPlot(containerId, data) {
     const height = 500 - margin.top - margin.bottom;
     
     // Get asteroid data for scatter plot
-    const chartDataset = getChartData(data).scatter;
+    const chartData = getChartData(data).scatter;
     
     const svg = container
         .append('svg')
@@ -30,12 +30,12 @@ function renderScatterPlot(containerId, data) {
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
     const x = d3.scaleLinear()
-        .domain([0, d3.max(chartDataset, d => d.diameter_avg)])
+        .domain([0, d3.max(chartData, d => d.diameter_avg)])
         .nice()
         .range([0, width]);
     
     const y = d3.scaleLinear()
-        .domain([0, d3.max(chartDataset, d => d.velocity)])
+        .domain([0, d3.max(chartData, d => d.velocity)])
         .nice()
         .range([height, 0]);
     
@@ -62,7 +62,7 @@ function renderScatterPlot(containerId, data) {
         .text('Velocity (km/h)');
     
     svg.selectAll('.dot')
-        .data(chartDataset)
+        .data(chartData)
         .enter()
         .append('circle')
         .attr('class', 'dot')

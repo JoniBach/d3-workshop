@@ -20,7 +20,7 @@ function renderHeatmap(containerId, data) {
     const height = 500 - margin.top - margin.bottom;
     
     // Get asteroid data for heatmap
-    const chartDataset = getChartData(data).heatmap;
+    const chartData = getChartData(data).heatmap;
     
     const svg = container
         .append('svg')
@@ -33,8 +33,8 @@ function renderHeatmap(containerId, data) {
     const sizeBins = 10;
     const velocityBins = 10;
     
-    const sizeExtent = d3.extent(chartDataset, d => d.diameter_avg);
-    const velocityExtent = d3.extent(chartDataset, d => d.velocity);
+    const sizeExtent = d3.extent(chartData, d => d.diameter_avg);
+    const velocityExtent = d3.extent(chartData, d => d.velocity);
     
     const sizeScale = d3.scaleLinear()
         .domain(sizeExtent)
@@ -47,7 +47,7 @@ function renderHeatmap(containerId, data) {
     // Create 2D grid
     const grid = Array(velocityBins).fill().map(() => Array(sizeBins).fill(0));
     
-    chartDataset.forEach(d => {
+    chartData.forEach(d => {
         const sizeIdx = Math.min(Math.floor(sizeScale(d.diameter_avg)), sizeBins - 1);
         const velIdx = Math.min(Math.floor(velocityScale(d.velocity)), velocityBins - 1);
         grid[velIdx][sizeIdx]++;

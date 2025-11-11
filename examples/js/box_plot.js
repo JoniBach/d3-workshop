@@ -20,9 +20,9 @@ function renderBoxPlot(containerId, data) {
     const height = 500 - margin.top - margin.bottom;
     
     // Get asteroid data for box plot
-    const chartDataset = getChartData(data).boxPlot;
+    const chartData = getChartData(data).boxPlot;
     const stats = getMetricStats('diameter_avg');
-    const diameters = chartDataset.map(d => d.diameter_avg).sort((a, b) => a - b);
+    const diameters = chartData.map(d => d.diameter_avg).sort((a, b) => a - b);
     
     // Calculate IQR and outliers
     const iqr = stats.q3 - stats.q1;
