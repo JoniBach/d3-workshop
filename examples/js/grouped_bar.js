@@ -19,8 +19,8 @@ function renderGroupedBar(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    // Get data by size category
-    const sizeCategories = chartData(data).groupedBar;
+    // Get size categories for grouped bar chart
+    const chartDataset = chartData(data).groupedBar;
     const categories = ['small', 'medium', 'large', 'very_large'];
     const categoryLabels = {
         small: 'Small (<0.1km)',
@@ -32,8 +32,8 @@ function renderGroupedBar(containerId, data) {
     // Prepare grouped data
     const groupedData = categories.map(cat => ({
         category: categoryLabels[cat],
-        hazardous: sizeCategories[cat].filter(a => a.is_hazardous).length,
-        safe: sizeCategories[cat].filter(a => !a.is_hazardous).length
+        hazardous: chartDataset[cat].filter(a => a.is_hazardous).length,
+        safe: chartDataset[cat].filter(a => !a.is_hazardous).length
     }));
     
     const svg = container

@@ -19,7 +19,8 @@ function renderStackedBar(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    const dailyCounts = chartData(data).stackedBar;
+    // Get daily counts for stacked bar chart
+    const chartDataset = chartData(data).stackedBar;
     
     const svg = container
         .append('svg')
@@ -32,16 +33,16 @@ function renderStackedBar(containerId, data) {
     const stack = d3.stack()
         .keys(['non_hazardous', 'hazardous']);
     
-    const stackedData = stack(dailyCounts);
+    const stackedData = stack(chartDataset);
     
     // Scales
     const x = d3.scaleBand()
-        .domain(dailyCounts.map(d => d.date))
+        .domain(chartDataset.map(d => d.date))
         .range([0, width])
         .padding(0.2);
     
     const y = d3.scaleLinear()
-        .domain([0, d3.max(dailyCounts, d => d.total)])
+        .domain([0, d3.max(chartDataset, d => d.total)])
         .nice()
         .range([height, 0]);
     

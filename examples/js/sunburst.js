@@ -19,12 +19,13 @@ function renderSunburst(containerId, data) {
     const height = 600;
     const radius = Math.min(width, height) / 2;
     
-    const sizeCategories = chartData(data).sunburst;
+    // Get size categories for sunburst
+    const chartDataset = chartData(data).sunburst;
     
     // Create hierarchical data
     const hierarchyData = {
         name: 'asteroids',
-        children: Object.entries(sizeCategories).map(([category, asteroids]) => ({
+        children: Object.entries(chartDataset).map(([category, asteroids]) => ({
             name: category,
             children: asteroids.map(a => ({
                 name: a.name,

@@ -21,8 +21,8 @@ function renderBarChart(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    // Get top 10 asteroids by average diameter
-    const topAsteroids = chartData(data).bar;
+    // Get top asteroids by diameter
+    const chartDataset = chartData(data).bar;
     
     // Create SVG
     const svg = container
@@ -34,12 +34,12 @@ function renderBarChart(containerId, data) {
     
     // Create scales
     const xScale = d3.scaleBand()
-        .domain(topAsteroids.map(d => d.name))
+        .domain(chartDataset.map(d => d.name))
         .range([0, width])
         .padding(0.2);
     
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(topAsteroids, d => d.diameter_avg)])
+        .domain([0, d3.max(chartDataset, d => d.diameter_avg)])
         .nice()
         .range([height, 0]);
     
@@ -84,7 +84,7 @@ function renderBarChart(containerId, data) {
     
     // Add bars
     svg.selectAll('.bar')
-        .data(topAsteroids)
+        .data(chartDataset)
         .enter()
         .append('rect')
         .attr('class', 'bar')

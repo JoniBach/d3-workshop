@@ -19,7 +19,8 @@ function renderAreaChart(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    const dailyCounts = chartData(data).area;
+    // Get daily counts for area chart
+    const chartDataset = chartData(data).area;
     
     const svg = container
         .append('svg')
@@ -32,7 +33,7 @@ function renderAreaChart(containerId, data) {
     
     // Calculate cumulative counts
     let cumulative = 0;
-    const cumulativeData = dailyCounts.map(d => {
+    const cumulativeData = chartDataset.map(d => {
         cumulative += d.total;
         return {
             date: parseDate(d.date),

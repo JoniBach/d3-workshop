@@ -19,9 +19,10 @@ function renderDonutChart(containerId, data) {
     const height = 400;
     const radius = Math.min(width, height) / 2 - 40;
     
-    const sizeCategories = chartData(data).donut;
-    const totalCount = Object.values(sizeCategories).flat().length;
-    const hazardousCount = Object.values(sizeCategories).flat().filter(a => a.is_hazardous).length;
+    // Get size categories for donut chart
+    const chartDataset = chartData(data).donut;
+    const totalCount = Object.values(chartDataset).flat().length;
+    const hazardousCount = Object.values(chartDataset).flat().filter(a => a.is_hazardous).length;
     const nonHazardousCount = totalCount - hazardousCount;
     
     const pieData = [

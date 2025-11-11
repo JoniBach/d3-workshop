@@ -19,7 +19,8 @@ function renderStreamGraph(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    const dailyCounts = chartData(data).streamGraph;
+    // Get daily counts for stream graph
+    const chartDataset = chartData(data).streamGraph;
     
     const svg = container
         .append('svg')
@@ -29,16 +30,16 @@ function renderStreamGraph(containerId, data) {
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
     const parseDate = d3.timeParse('%Y-%m-%d');
-    dailyCounts.forEach(d => d.parsedDate = parseDate(d.date));
+    chartDataset.forEach(d => d.parsedDate = parseDate(d.date));
     
     const stack = d3.stack()
         .keys(['hazardous', 'non_hazardous'])
         .offset(d3.stackOffsetWiggle);
     
-    const stackedData = stack(dailyCounts);
+    const stackedData = stack(chartDataset);
     
     const x = d3.scaleTime()
-        .domain(d3.extent(dailyCounts, d => d.parsedDate))
+        .domain(d3.extent(chartDataset, d => d.parsedDate))
         .range([0, width]);
     
     const y = d3.scaleLinear()

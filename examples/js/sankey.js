@@ -26,7 +26,8 @@ function renderSankey(containerId, data) {
         .attr('width', width)
         .attr('height', height);
     
-    const dailyCounts = chartData(data).sankey;
+    // Get daily counts for sankey diagram
+    const chartDataset = chartData(data).sankey;
     
     // Group by size category from daily counts
     const sizeCategories = {
@@ -39,7 +40,7 @@ function renderSankey(containerId, data) {
     // We'll use a simplified approach - just use the daily counts
     // Create flows from dates to hazard status
     const flows = [];
-    dailyCounts.slice(0, 4).forEach((day, i) => {
+    chartDataset.slice(0, 4).forEach((day, i) => {
         const hazCount = day.hazardous;
         const safeCount = day.non_hazardous;
         
@@ -95,7 +96,7 @@ function renderSankey(containerId, data) {
     });
     
     // Draw source nodes
-    dailyCounts.slice(0, 4).forEach((day, i) => {
+    chartDataset.slice(0, 4).forEach((day, i) => {
         svg.append('rect')
             .attr('x', 150)
             .attr('y', i * 100 + 30)

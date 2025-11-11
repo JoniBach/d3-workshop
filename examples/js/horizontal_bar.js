@@ -19,7 +19,8 @@ function renderHorizontalBar(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    const topAsteroids = chartData(data).horizontalBar;
+    // Get top asteroids by velocity
+    const chartDataset = chartData(data).horizontalBar;
     
     const svg = container
         .append('svg')
@@ -30,12 +31,12 @@ function renderHorizontalBar(containerId, data) {
     
     // Scales - note X is now the value, Y is the category
     const xScale = d3.scaleLinear()
-        .domain([0, d3.max(topAsteroids, d => d.velocity)])
+        .domain([0, d3.max(chartDataset, d => d.velocity)])
         .nice()
         .range([0, width]);
     
     const yScale = d3.scaleBand()
-        .domain(topAsteroids.map(d => d.name))
+        .domain(chartDataset.map(d => d.name))
         .range([0, height])
         .padding(0.2);
     
@@ -59,7 +60,7 @@ function renderHorizontalBar(containerId, data) {
     
     // Bars
     svg.selectAll('.bar')
-        .data(topAsteroids)
+        .data(chartDataset)
         .enter()
         .append('rect')
         .attr('class', 'bar')

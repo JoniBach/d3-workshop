@@ -18,12 +18,13 @@ function renderTreemap(containerId, data) {
     const width = 800;
     const height = 500;
     
-    const sizeCategories = chartData(data).treemap;
+    // Get size categories for treemap
+    const chartDataset = chartData(data).treemap;
     
     // Create hierarchical data
     const hierarchyData = {
         name: 'asteroids',
-        children: Object.entries(sizeCategories).map(([category, asteroids]) => ({
+        children: Object.entries(chartDataset).map(([category, asteroids]) => ({
             name: category,
             children: asteroids.map(a => ({
                 name: a.name,

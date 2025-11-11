@@ -19,8 +19,9 @@ function renderViolinPlot(containerId, data) {
     const width = 600 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    const asteroids = chartData(data).violinPlot;
-    const velocities = asteroids.map(d => d.velocity).sort((a, b) => a - b);
+    // Get asteroid data for violin plot
+    const chartDataset = chartData(data).violinPlot;
+    const velocities = chartDataset.map(d => d.velocity).sort((a, b) => a - b);
     
     const svg = container
         .append('svg')

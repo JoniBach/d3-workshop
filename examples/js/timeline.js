@@ -19,8 +19,9 @@ function renderTimeline(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
     
-    const allAsteroids = chartData(data).timeline;
-    const topAsteroids = allAsteroids
+    // Get asteroid data for timeline (top 15 by diameter)
+    const chartDataset = chartData(data).timeline;
+    const topAsteroids = chartDataset
         .sort((a, b) => b.diameter_avg - a.diameter_avg)
         .slice(0, 15);
     
