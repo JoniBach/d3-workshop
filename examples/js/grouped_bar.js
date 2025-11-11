@@ -12,6 +12,9 @@ window.GROUPED_BAR_CONFIG = {
 };
 
 function renderGroupedBar(containerId, data) {
+    // ============================================================================
+    // STEP 1: SETUP - Prepare the container and set chart dimensions
+    // ============================================================================
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();
     
@@ -19,7 +22,19 @@ function renderGroupedBar(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    // Get size categories for grouped bar chart
+    // ============================================================================
+    // STEP 2: CREATE SVG CANVAS - Build the drawing area
+    // ============================================================================
+    const svg = container
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+    
+    // ============================================================================
+    // STEP 3: PREPARE DATA - Group asteroids by size and hazard status
+    // ============================================================================
     const chartData = getChartData(data).groupedBar;
     const categories = ['small', 'medium', 'large', 'very_large'];
     const categoryLabels = {
@@ -36,34 +51,35 @@ function renderGroupedBar(containerId, data) {
         safe: chartData[cat].filter(a => !a.is_hazardous).length
     }));
     
-    const svg = container
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
-    
-    // Scales
+    // ============================================================================
+    // STEP 4: CREATE SCALES - Map data values to pixel positions
+    // ============================================================================
+    // X0 scale: Maps size categories to horizontal positions
     const x0 = d3.scaleBand()
         .domain(groupedData.map(d => d.category))
         .range([0, width])
         .padding(0.2);
     
+    // X1 scale: Maps hazard status within each category
     const x1 = d3.scaleBand()
         .domain(['hazardous', 'safe'])
         .range([0, x0.bandwidth()])
         .padding(0.05);
     
+    // Y scale: Maps counts to vertical positions
     const y = d3.scaleLinear()
         .domain([0, d3.max(groupedData, d => Math.max(d.hazardous, d.safe))])
         .nice()
         .range([height, 0]);
     
+    // Color scale: Maps hazard status to colors
     const color = d3.scaleOrdinal()
         .domain(['hazardous', 'safe'])
         .range(['#e74c3c', '#2ecc71']);
     
-    // Axes
+    // ============================================================================
+    // STEP 5: DRAW AXES - Add X and Y axes to the chart
+    // ============================================================================
     svg.append('g')
         .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(x0));
@@ -71,7 +87,9 @@ function renderGroupedBar(containerId, data) {
     svg.append('g')
         .call(d3.axisLeft(y));
     
-    // Y axis label
+    // ============================================================================
+    // STEP 6: ADD LABELS - Label the Y axis
+    // ============================================================================
     svg.append('text')
         .attr('transform', 'rotate(-90)')
         .attr('y', -margin.left + 15)
@@ -80,7 +98,10 @@ function renderGroupedBar(containerId, data) {
         .style('font-size', '12px')
         .text('Count');
     
-    // Groups
+    // ============================================================================
+    // STEP 7: DRAW GROUPED BARS - Create side-by-side bars for each category
+    // ============================================================================
+    // Create groups for each category
     const groups = svg.selectAll('.group')
         .data(groupedData)
         .enter()
@@ -105,7 +126,9 @@ function renderGroupedBar(containerId, data) {
         .attr('fill', color('safe'))
         .attr('opacity', 0.8);
     
-    // Legend
+    // ============================================================================
+    // STEP 8: ADD LEGEND - Show hazardous vs safe categories
+    // ============================================================================
     const legend = svg.append('g')
         .attr('transform', `translate(${width - 120}, 0)`);
     

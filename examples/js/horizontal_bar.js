@@ -12,6 +12,9 @@ window.HORIZONTAL_BAR_CONFIG = {
 };
 
 function renderHorizontalBar(containerId, data) {
+    // ============================================================================
+    // STEP 1: SETUP - Prepare the container and set chart dimensions
+    // ============================================================================
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();
     
@@ -19,9 +22,9 @@ function renderHorizontalBar(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    // Get top asteroids by velocity
-    const chartData = getChartData(data).horizontalBar;
-    
+    // ============================================================================
+    // STEP 2: CREATE SVG CANVAS - Build the drawing area
+    // ============================================================================
     const svg = container
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -29,18 +32,29 @@ function renderHorizontalBar(containerId, data) {
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
-    // Scales - note X is now the value, Y is the category
+    // ============================================================================
+    // STEP 3: PREPARE DATA - Get top asteroids by velocity
+    // ============================================================================
+    const chartData = getChartData(data).horizontalBar;
+    
+    // ============================================================================
+    // STEP 4: CREATE SCALES - Map data values to pixel positions
+    // ============================================================================
+    // X scale: Maps velocity to horizontal position (the value)
     const xScale = d3.scaleLinear()
         .domain([0, d3.max(chartData, d => d.velocity)])
         .nice()
         .range([0, width]);
     
+    // Y scale: Maps asteroid names to vertical positions (the category)
     const yScale = d3.scaleBand()
         .domain(chartData.map(d => d.name))
         .range([0, height])
         .padding(0.2);
     
-    // Axes
+    // ============================================================================
+    // STEP 5: DRAW AXES - Add X and Y axes to the chart
+    // ============================================================================
     svg.append('g')
         .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(xScale));
@@ -50,7 +64,9 @@ function renderHorizontalBar(containerId, data) {
         .selectAll('text')
         .style('font-size', '10px');
     
-    // X axis label
+    // ============================================================================
+    // STEP 6: ADD LABELS - Label the X axis
+    // ============================================================================
     svg.append('text')
         .attr('x', width / 2)
         .attr('y', height + 40)
@@ -58,12 +74,13 @@ function renderHorizontalBar(containerId, data) {
         .style('font-size', '12px')
         .text('Velocity (km/h)');
     
-    // Bars
+    // ============================================================================
+    // STEP 7: DRAW BARS - Create horizontal bars
+    // ============================================================================
     svg.selectAll('.bar')
         .data(chartData)
         .enter()
         .append('rect')
-        .attr('class', 'bar')
         .attr('x', 0)
         .attr('y', d => yScale(d.name))
         .attr('width', d => xScale(d.velocity))

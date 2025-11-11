@@ -12,6 +12,9 @@ window.AREA_CHART_CONFIG = {
 };
 
 function renderAreaChart(containerId, data) {
+    // ============================================================================
+    // STEP 1: SETUP - Prepare the container and set chart dimensions
+    // ============================================================================
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();
     
@@ -19,9 +22,9 @@ function renderAreaChart(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    // Get daily counts for area chart
-    const chartData = getChartData(data).area;
-    
+    // ============================================================================
+    // STEP 2: CREATE SVG CANVAS - Build the drawing area
+    // ============================================================================
     const svg = container
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -29,6 +32,10 @@ function renderAreaChart(containerId, data) {
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
+    // ============================================================================
+    // STEP 3: PREPARE DATA - Get and transform data for cumulative area
+    // ============================================================================
+    const chartData = getChartData(data).area;
     const parseDate = d3.timeParse('%Y-%m-%d');
     
     // Calculate cumulative counts
@@ -41,6 +48,9 @@ function renderAreaChart(containerId, data) {
         };
     });
     
+    // ============================================================================
+    // STEP 4: CREATE SCALES - Map data values to pixel positions
+    // ============================================================================
     const x = d3.scaleTime()
         .domain(d3.extent(cumulativeData, d => d.date))
         .range([0, width]);
@@ -50,6 +60,9 @@ function renderAreaChart(containerId, data) {
         .nice()
         .range([height, 0]);
     
+    // ============================================================================
+    // STEP 5: DRAW AXES - Add X and Y axes to the chart
+    // ============================================================================
     svg.append('g')
         .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(x));
@@ -57,6 +70,9 @@ function renderAreaChart(containerId, data) {
     svg.append('g')
         .call(d3.axisLeft(y));
     
+    // ============================================================================
+    // STEP 6: ADD LABELS - Label the axes
+    // ============================================================================
     svg.append('text')
         .attr('x', width / 2)
         .attr('y', height + 40)
@@ -72,21 +88,28 @@ function renderAreaChart(containerId, data) {
         .style('font-size', '12px')
         .text('Cumulative Count');
     
+    // ============================================================================
+    // STEP 7: DRAW AREA AND LINE - Create filled area and border line
+    // ============================================================================
+    // Create area generator
     const area = d3.area()
         .x(d => x(d.date))
         .y0(height)
         .y1(d => y(d.cumulative));
     
+    // Draw filled area
     svg.append('path')
         .datum(cumulativeData)
         .attr('fill', '#3498db')
         .attr('opacity', 0.6)
         .attr('d', area);
     
+    // Create line generator for border
     const line = d3.line()
         .x(d => x(d.date))
         .y(d => y(d.cumulative));
     
+    // Draw border line
     svg.append('path')
         .datum(cumulativeData)
         .attr('fill', 'none')

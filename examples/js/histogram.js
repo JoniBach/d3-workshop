@@ -12,6 +12,9 @@ window.HISTOGRAM_CONFIG = {
 };
 
 function renderHistogram(containerId, data) {
+    // ============================================================================
+    // STEP 1: SETUP - Prepare the container and set chart dimensions
+    // ============================================================================
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();
     
@@ -19,10 +22,9 @@ function renderHistogram(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    // Get asteroid data for histogram
-    const chartData = getChartData(data).histogram;
-    const velocities = chartData.map(d => d.velocity);
-    
+    // ============================================================================
+    // STEP 2: CREATE SVG CANVAS - Build the drawing area
+    // ============================================================================
     const svg = container
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -30,25 +32,37 @@ function renderHistogram(containerId, data) {
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
-    // Create bins
+    // ============================================================================
+    // STEP 3: PREPARE DATA - Extract velocities and create bins
+    // ============================================================================
+    const chartData = getChartData(data).histogram;
+    const velocities = chartData.map(d => d.velocity);
+    
+    // ============================================================================
+    // STEP 4: CREATE SCALES AND BINS - Set up scales and bin the data
+    // ============================================================================
+    // X scale for velocity values
     const x = d3.scaleLinear()
         .domain(d3.extent(velocities))
         .nice()
         .range([0, width]);
     
+    // Create histogram bins
     const histogram = d3.bin()
         .domain(x.domain())
         .thresholds(x.ticks(20));
     
     const bins = histogram(velocities);
     
-    // Y scale
+    // Y scale for frequency counts
     const y = d3.scaleLinear()
         .domain([0, d3.max(bins, d => d.length)])
         .nice()
         .range([height, 0]);
     
-    // Axes
+    // ============================================================================
+    // STEP 5: DRAW AXES - Add X and Y axes to the chart
+    // ============================================================================
     svg.append('g')
         .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(x));
@@ -56,7 +70,9 @@ function renderHistogram(containerId, data) {
     svg.append('g')
         .call(d3.axisLeft(y));
     
-    // Axis labels
+    // ============================================================================
+    // STEP 6: ADD LABELS - Label the axes
+    // ============================================================================
     svg.append('text')
         .attr('x', width / 2)
         .attr('y', height + 40)
@@ -72,7 +88,9 @@ function renderHistogram(containerId, data) {
         .style('font-size', '12px')
         .text('Frequency');
     
-    // Draw bars
+    // ============================================================================
+    // STEP 7: DRAW BARS - Create histogram bars for each bin
+    // ============================================================================
     svg.selectAll('.bar')
         .data(bins)
         .enter()

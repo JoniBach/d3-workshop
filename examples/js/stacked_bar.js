@@ -12,6 +12,9 @@ window.STACKED_BAR_CONFIG = {
 };
 
 function renderStackedBar(containerId, data) {
+    // ============================================================================
+    // STEP 1: SETUP - Prepare the container and set chart dimensions
+    // ============================================================================
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();
     
@@ -19,9 +22,9 @@ function renderStackedBar(containerId, data) {
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    // Get daily counts for stacked bar chart
-    const chartData = getChartData(data).stackedBar;
-    
+    // ============================================================================
+    // STEP 2: CREATE SVG CANVAS - Build the drawing area
+    // ============================================================================
     const svg = container
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -29,28 +32,40 @@ function renderStackedBar(containerId, data) {
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
-    // Stack the data
+    // ============================================================================
+    // STEP 3: PREPARE DATA - Get daily counts and stack them
+    // ============================================================================
+    const chartData = getChartData(data).stackedBar;
+    
+    // Stack the data using d3.stack()
     const stack = d3.stack()
         .keys(['non_hazardous', 'hazardous']);
     
     const stackedData = stack(chartData);
     
-    // Scales
+    // ============================================================================
+    // STEP 4: CREATE SCALES - Map data values to pixel positions
+    // ============================================================================
+    // X scale: Maps dates to horizontal positions
     const x = d3.scaleBand()
         .domain(chartData.map(d => d.date))
         .range([0, width])
         .padding(0.2);
     
+    // Y scale: Maps stacked counts to vertical positions
     const y = d3.scaleLinear()
         .domain([0, d3.max(chartData, d => d.total)])
         .nice()
         .range([height, 0]);
     
+    // Color scale: Maps hazard status to colors
     const color = d3.scaleOrdinal()
         .domain(['non_hazardous', 'hazardous'])
         .range(['#2ecc71', '#e74c3c']);
     
-    // Axes
+    // ============================================================================
+    // STEP 5: DRAW AXES - Add X and Y axes to the chart
+    // ============================================================================
     svg.append('g')
         .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(x))
@@ -62,7 +77,9 @@ function renderStackedBar(containerId, data) {
     svg.append('g')
         .call(d3.axisLeft(y));
     
-    // Y axis label
+    // ============================================================================
+    // STEP 6: ADD LABELS - Label the Y axis
+    // ============================================================================
     svg.append('text')
         .attr('transform', 'rotate(-90)')
         .attr('y', -margin.left + 15)
@@ -71,12 +88,13 @@ function renderStackedBar(containerId, data) {
         .style('font-size', '12px')
         .text('Count');
     
-    // Draw stacked bars
+    // ============================================================================
+    // STEP 7: DRAW STACKED BARS - Create stacked bar segments
+    // ============================================================================
     svg.selectAll('.layer')
         .data(stackedData)
         .enter()
         .append('g')
-        .attr('class', 'layer')
         .attr('fill', d => color(d.key))
         .attr('opacity', 0.8)
         .selectAll('rect')
@@ -88,7 +106,9 @@ function renderStackedBar(containerId, data) {
         .attr('height', d => y(d[0]) - y(d[1]))
         .attr('width', x.bandwidth());
     
-    // Legend
+    // ============================================================================
+    // STEP 8: ADD LEGEND - Show hazardous vs non-hazardous categories
+    // ============================================================================
     const legend = svg.append('g')
         .attr('transform', `translate(${width - 140}, 0)`);
     

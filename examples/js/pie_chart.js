@@ -12,6 +12,9 @@ window.PIE_CHART_CONFIG = {
 };
 
 function renderPieChart(containerId, data) {
+    // ============================================================================
+    // STEP 1: SETUP - Prepare the container and set chart dimensions
+    // ============================================================================
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();
     
@@ -19,7 +22,19 @@ function renderPieChart(containerId, data) {
     const height = 400;
     const radius = Math.min(width, height) / 2 - 40;
     
-    // Get size categories for pie chart
+    // ============================================================================
+    // STEP 2: CREATE SVG CANVAS - Build the drawing area
+    // ============================================================================
+    const svg = container
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .append('g')
+        .attr('transform', `translate(${width / 2},${height / 2})`);
+    
+    // ============================================================================
+    // STEP 3: PREPARE DATA - Calculate hazardous vs non-hazardous counts
+    // ============================================================================
     const chartData = getChartData(data).pie;
     const totalCount = Object.values(chartData).flat().length;
     const hazardousCount = Object.values(chartData).flat().filter(a => a.is_hazardous).length;
@@ -30,34 +45,32 @@ function renderPieChart(containerId, data) {
         { label: 'Non-Hazardous', count: nonHazardousCount }
     ];
     
-    const svg = container
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        .append('g')
-        .attr('transform', `translate(${width / 2},${height / 2})`);
-    
+    // ============================================================================
+    // STEP 4: CREATE SCALES AND GENERATORS - Set up color scale and arc generators
+    // ============================================================================
     // Color scale
     const color = d3.scaleOrdinal()
         .domain(['Hazardous', 'Non-Hazardous'])
         .range(['#e74c3c', '#2ecc71']);
     
-    // Pie generator
+    // Pie generator - computes angles
     const pie = d3.pie()
         .value(d => d.count)
         .sort(null);
     
-    // Arc generator
+    // Arc generator - creates slice paths
     const arc = d3.arc()
         .innerRadius(0)
         .outerRadius(radius);
     
-    // Arc for labels (slightly outside)
+    // Arc for labels (positioned inside slices)
     const labelArc = d3.arc()
         .innerRadius(radius * 0.6)
         .outerRadius(radius * 0.6);
     
-    // Draw slices
+    // ============================================================================
+    // STEP 5: DRAW PIE SLICES - Create the pie chart segments
+    // ============================================================================
     const slices = svg.selectAll('.slice')
         .data(pie(pieData))
         .enter()
@@ -71,7 +84,9 @@ function renderPieChart(containerId, data) {
         .attr('stroke', 'white')
         .attr('stroke-width', 2);
     
-    // Add labels
+    // ============================================================================
+    // STEP 6: ADD LABELS - Show percentages on slices
+    // ============================================================================
     slices.append('text')
         .attr('transform', d => `translate(${labelArc.centroid(d)})`)
         .attr('text-anchor', 'middle')
@@ -83,7 +98,9 @@ function renderPieChart(containerId, data) {
             return `${percent}%`;
         });
     
-    // Legend
+    // ============================================================================
+    // STEP 7: ADD LEGEND - Show category names and counts
+    // ============================================================================
     const legend = svg.append('g')
         .attr('transform', `translate(${radius + 20}, -${radius})`);
     

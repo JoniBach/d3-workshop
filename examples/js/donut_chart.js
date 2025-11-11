@@ -12,6 +12,9 @@ window.DONUT_CHART_CONFIG = {
 };
 
 function renderDonutChart(containerId, data) {
+    // ============================================================================
+    // STEP 1: SETUP - Prepare the container and set chart dimensions
+    // ============================================================================
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();
     
@@ -19,7 +22,19 @@ function renderDonutChart(containerId, data) {
     const height = 400;
     const radius = Math.min(width, height) / 2 - 40;
     
-    // Get size categories for donut chart
+    // ============================================================================
+    // STEP 2: CREATE SVG CANVAS - Build the drawing area
+    // ============================================================================
+    const svg = container
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .append('g')
+        .attr('transform', `translate(${width / 2},${height / 2})`);
+    
+    // ============================================================================
+    // STEP 3: PREPARE DATA - Calculate hazardous vs non-hazardous counts
+    // ============================================================================
     const chartData = getChartData(data).donut;
     const totalCount = Object.values(chartData).flat().length;
     const hazardousCount = Object.values(chartData).flat().filter(a => a.is_hazardous).length;
@@ -30,13 +45,9 @@ function renderDonutChart(containerId, data) {
         { label: 'Non-Hazardous', count: nonHazardousCount }
     ];
     
-    const svg = container
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        .append('g')
-        .attr('transform', `translate(${width / 2},${height / 2})`);
-    
+    // ============================================================================
+    // STEP 4: CREATE SCALES AND GENERATORS - Set up color scale and arc generators
+    // ============================================================================
     const color = d3.scaleOrdinal()
         .domain(['Hazardous', 'Non-Hazardous'])
         .range(['#e74c3c', '#2ecc71']);
@@ -45,12 +56,14 @@ function renderDonutChart(containerId, data) {
         .value(d => d.count)
         .sort(null);
     
-    // Donut arc - note the innerRadius
+    // Donut arc - innerRadius creates the hole in the center
     const arc = d3.arc()
-        .innerRadius(radius * 0.6)  // This makes it a donut!
+        .innerRadius(radius * 0.6)
         .outerRadius(radius);
     
-    // Draw slices
+    // ============================================================================
+    // STEP 5: DRAW DONUT SLICES - Create the donut chart segments
+    // ============================================================================
     svg.selectAll('.slice')
         .data(pie(pieData))
         .enter()
@@ -61,7 +74,9 @@ function renderDonutChart(containerId, data) {
         .attr('stroke', 'white')
         .attr('stroke-width', 2);
     
-    // Center text - total count
+    // ============================================================================
+    // STEP 6: ADD CENTER TEXT - Display total count in the donut hole
+    // ============================================================================
     svg.append('text')
         .attr('text-anchor', 'middle')
         .attr('dy', '-0.5em')
@@ -76,7 +91,9 @@ function renderDonutChart(containerId, data) {
         .style('fill', '#666')
         .text('Total Asteroids');
     
-    // Legend
+    // ============================================================================
+    // STEP 7: ADD LEGEND - Show category names and counts
+    // ============================================================================
     const legend = svg.append('g')
         .attr('transform', `translate(${radius + 20}, -${radius})`);
     

@@ -12,19 +12,19 @@ window.BAR_CHART_CONFIG = {
 };
 
 function renderBarChart(containerId, data) {
-    // Clear any existing content
+    // ============================================================================
+    // STEP 1: SETUP - Prepare the container and set chart dimensions
+    // ============================================================================
     const container = d3.select(`#${containerId}`);
     container.selectAll('*').remove();
     
-    // Set up dimensions
     const margin = { top: 20, right: 30, bottom: 100, left: 60 };
     const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
     
-    // Get top asteroids by diameter
-    const chartData = getChartData(data).bar;
-    
-    // Create SVG
+    // ============================================================================
+    // STEP 2: CREATE SVG CANVAS - Build the drawing area
+    // ============================================================================
     const svg = container
         .append('svg')
         .attr('width', width + margin.left + margin.right)
@@ -32,23 +32,34 @@ function renderBarChart(containerId, data) {
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
     
-    // Create scales
+    // ============================================================================
+    // STEP 3: PREPARE DATA - Get top asteroids by diameter
+    // ============================================================================
+    const chartData = getChartData(data).bar;
+    
+    // ============================================================================
+    // STEP 4: CREATE SCALES - Map data values to pixel positions
+    // ============================================================================
+    // X scale: Maps asteroid names to horizontal positions
     const xScale = d3.scaleBand()
         .domain(chartData.map(d => d.name))
         .range([0, width])
         .padding(0.2);
     
+    // Y scale: Maps diameter to vertical positions
     const yScale = d3.scaleLinear()
         .domain([0, d3.max(chartData, d => d.diameter_avg)])
         .nice()
         .range([height, 0]);
     
-    // Create color scale based on hazard status
+    // Color scale: Maps hazard status to colors
     const colorScale = d3.scaleOrdinal()
         .domain([true, false])
-        .range(['#e74c3c', '#3498db']); // red for hazardous, blue for safe
+        .range(['#e74c3c', '#3498db'])
     
-    // Add X axis
+    // ============================================================================
+    // STEP 5: DRAW AXES - Add X and Y axes to the chart
+    // ============================================================================
     svg.append('g')
         .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(xScale))
@@ -57,11 +68,12 @@ function renderBarChart(containerId, data) {
         .style('text-anchor', 'end')
         .style('font-size', '10px');
     
-    // Add Y axis
     svg.append('g')
         .call(d3.axisLeft(yScale));
     
-    // Add Y axis label
+    // ============================================================================
+    // STEP 6: ADD LABELS - Label the Y axis
+    // ============================================================================
     svg.append('text')
         .attr('transform', 'rotate(-90)')
         .attr('y', -margin.left + 15)
@@ -70,6 +82,9 @@ function renderBarChart(containerId, data) {
         .style('font-size', '12px')
         .text('Average Diameter (km)');
     
+    // ============================================================================
+    // STEP 7: CREATE TOOLTIP - For interactive hover information
+    // ============================================================================
     // Create tooltip
     const tooltip = container
         .append('div')
@@ -82,7 +97,9 @@ function renderBarChart(containerId, data) {
         .style('pointer-events', 'none')
         .style('opacity', 0);
     
-    // Add bars
+    // ============================================================================
+    // STEP 8: DRAW BARS - Create the bar rectangles with interactivity
+    // ============================================================================
     svg.selectAll('.bar')
         .data(chartData)
         .enter()
