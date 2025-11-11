@@ -4,6 +4,16 @@
  * ensuring consistency across all chart types and making it easy to update
  * data processing logic in one place.
  * 
+ * Available Chart Types:
+ * - **Time-based:** area, line, streamGraph, timeline
+ * - **Bar Charts:** bar, horizontalBar, groupedBar, stackedBar
+ * - **Part-to-Whole:** pie, donut, treemap, sunburst
+ * - **Distribution:** histogram, boxPlot, violinPlot
+ * - **Relationship:** scatter, bubble, heatmap
+ * - **Network/Hierarchy:** forceDirected, sankey
+ * 
+ * ============================================================================
+ * 
  * @param {Object} data - The raw asteroid data object containing all asteroid information
  * @param {Array<Object>} data.asteroids - Array of asteroid objects with properties like:
  *   - id: Unique identifier
@@ -24,6 +34,7 @@
  * @returns {Array<Object>} area - Daily asteroid counts for area chart (cumulative visualization)
  * @returns {Array<Object>} line - Daily asteroid counts for line chart (trend over time)
  * @returns {Array<Object>} streamGraph - Daily asteroid counts for stream graph (flowing stacked areas)
+ * @returns {Array<Object>} timeline - Raw asteroid array for temporal events (chronological points)
  * 
  * **Bar Charts:**
  * @returns {Array<Object>} bar - Top 10 asteroids by diameter (vertical bars)
@@ -52,7 +63,6 @@
  * **Network/Hierarchy Charts:**
  * @returns {Object} forceDirected - Asteroids grouped by date for network simulation (physics-based layout)
  * @returns {Array<Object>} sankey - Daily counts for flow diagram (date → hazard status flows)
- * @returns {Array<Object>} timeline - Raw asteroid array for temporal events (chronological points)
  * 
  * @example
  * // Get data for a specific chart type
