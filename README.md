@@ -1,6 +1,6 @@
 # D3.js Workshop - NASA Asteroid Visualizations
 
-A comprehensive D3.js learning workshop featuring 20 different visualization types using real NASA Near-Earth Object (NEO) data.
+A comprehensive D3.js learning workshop_1 featuring 20 different visualization types using real NASA Near-Earth Object (NEO) data.
 
 ## 🚀 Quick Start
 
