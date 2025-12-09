@@ -120,6 +120,28 @@ function renderVisualization1(containerId, data) {
         .attr('r', 4)               // Radius
         .attr('fill', '#4CAF50');   // Green fill
 
-        
-    console.log('📊 Visualization 1 rendered:', chartData.length, 'data points');
+    // ============================================================================
+    // STEP 8: ADD TOOLTIPS - Implement interactive tooltips for data points
+    // ============================================================================
+    const tooltip = d3.select('body').append('div')
+        .style('position', 'absolute')
+        .style('opacity', 0)
+        .style('background', 'white')
+        .style('pointer-events', 'none');
+    
+    svg.selectAll('circle')
+        .on('mouseover', function(event, d) {
+            d3.select(this).attr('r', 8);
+            tooltip.style('opacity', 1)
+                .html(`Date: ${d.date}<br>Total: ${d.total}`)
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY - 28) + 'px');
+        })
+        .on('mouseout', function() {
+            d3.select(this).attr('r', 4);
+            tooltip.style('opacity', 0);
+        })
+        .on('click', function(event, d) {
+            alert(`Date: ${d.date}, Total: ${d.total}`);
+        });
 }
